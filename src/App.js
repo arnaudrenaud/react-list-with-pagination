@@ -9,28 +9,24 @@ class App extends Component {
 
     this.state = {
       restaurants: [],
-      pageNumber: 1,
+      pageNumber: 0,
     };
-  }
-
-  componentDidMount() {
-    fetch("https://paris-restaurants-api.herokuapp.com/restaurants/?_page=1&_limit=15")
-      .then(response => response.json())
-      .then(restaurants => {
-        this.setState({ restaurants });
-      });
   }
 
   showNextResults = () => {
     const nextPageNumber = this.state.pageNumber + 1
     fetch(`https://paris-restaurants-api.herokuapp.com/restaurants/?_page=${nextPageNumber}&_limit=15`)
       .then(response => response.json())
-      .then(restaurants => {
+      .then(nextRestaurants => {
         this.setState({
-          restaurants: [...this.state.restaurants, ...restaurants],
+          restaurants: [...this.state.restaurants, ...nextRestaurants],
           pageNumber: nextPageNumber
         });
       });
+  }
+
+  componentDidMount() {
+    this.showNextResults()
   }
 
   render() {
