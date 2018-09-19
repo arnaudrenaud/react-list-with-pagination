@@ -12,7 +12,7 @@ class App extends Component {
   }
 
   componentDidMount() {
-    fetch("https://paris-restaurants-api.herokuapp.com/restaurants/")
+    fetch("https://paris-restaurants-api.herokuapp.com/restaurants/?_page=1&_limit=15")
       .then(response => response.json())
       .then(restaurants => {
         this.setState({ restaurants });
