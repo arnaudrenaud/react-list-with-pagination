@@ -38,6 +38,10 @@ class App extends Component {
     this.showNextResults();
   }
 
+  componentDidUpdate() {
+    window.scrollTo(0, 0);
+  }
+
   render() {
     return (
       <div>
