@@ -9,31 +9,51 @@ class App extends Component {
 
     this.state = {
       restaurants: [],
-      pageNumber: 0,
+      pageNumber: 0
     };
   }
 
+  showPreviousResults = () => {
+    const previousPageNumber = this.state.pageNumber - 1;
+    fetch(
+      `https://paris-restaurants-api.herokuapp.com/restaurants/?_page=${previousPageNumber}&_limit=15`
+    )
+      .then(response => response.json())
+      .then(previousRestaurants => {
+        this.setState({
+          restaurants: previousRestaurants,
+          pageNumber: previousPageNumber
+        });
+      });
+  };
+
   showNextResults = () => {
-    const nextPageNumber = this.state.pageNumber + 1
-    fetch(`https://paris-restaurants-api.herokuapp.com/restaurants/?_page=${nextPageNumber}&_limit=15`)
+    const nextPageNumber = this.state.pageNumber + 1;
+    fetch(
+      `https://paris-restaurants-api.herokuapp.com/restaurants/?_page=${nextPageNumber}&_limit=15`
+    )
       .then(response => response.json())
       .then(nextRestaurants => {
         this.setState({
-          restaurants: [...this.state.restaurants, ...nextRestaurants],
+          restaurants: nextRestaurants,
           pageNumber: nextPageNumber
         });
       });
-  }
+  };
 
   componentDidMount() {
-    this.showNextResults()
+    this.showNextResults();
   }
 
   render() {
     return (
       <div>
         <Restaurants restaurants={this.state.restaurants} />
-        <Button onClick={this.showNextResults}>Voir les résultats suivants</Button>
+        {this.state.pageNumber >= 2
+          ? <Button onClick={this.showPreviousResults}>Page précédente</Button>
+          : null
+        }
+        <Button onClick={this.showNextResults}>Page suivante</Button>
       </div>
     );
   }
