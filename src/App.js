@@ -13,32 +13,25 @@ class App extends Component {
     };
   }
 
-  showPreviousResults = () => {
-    const previousPageNumber = this.state.pageNumber - 1;
+  showPage = (pageNumber) => {
     fetch(
-      `https://paris-restaurants-api.herokuapp.com/restaurants/?_page=${previousPageNumber}&_limit=15`
+      `https://paris-restaurants-api.herokuapp.com/restaurants/?_page=${pageNumber}&_limit=15`
     )
       .then(response => response.json())
       .then(previousRestaurants => {
         this.setState({
           restaurants: previousRestaurants,
-          pageNumber: previousPageNumber
+          pageNumber
         });
       });
   };
 
+  showPreviousResults = () => {
+    this.showPage(this.state.pageNumber - 1);
+  };
+
   showNextResults = () => {
-    const nextPageNumber = this.state.pageNumber + 1;
-    fetch(
-      `https://paris-restaurants-api.herokuapp.com/restaurants/?_page=${nextPageNumber}&_limit=15`
-    )
-      .then(response => response.json())
-      .then(nextRestaurants => {
-        this.setState({
-          restaurants: nextRestaurants,
-          pageNumber: nextPageNumber
-        });
-      });
+    this.showPage(this.state.pageNumber + 1);
   };
 
   componentDidMount() {
